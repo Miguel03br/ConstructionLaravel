@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\user;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $Users = users::all();
+        $Users = user::all();
 
         return view('users', ['users' => $Users]);
 
@@ -19,15 +20,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('create');
 
-        $data =$request->all();
-        users::findOrFail($request->id)->create($data);
-
-        $novoUser = $this->users->where('id', $id)->create($request->except(['_token', '_method']));
-
-       
-            return redirect('/cUserController.store')->with('message', 'Funcionário adicionado com sucesso');
+    
+        return redirect('/dashboard')->with('message', 'Funcionário adicionado com sucesso');
 
         
     }
@@ -37,7 +32,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $Users = new users;
+        $Users = new user;
 
         $Users->id = $request->id;
         $Users->nome = $request->nome;  
@@ -46,14 +41,6 @@ class UserController extends Controller
         $Users->senha = $request->senha;
 
         $Users->save();
-
-
-        $userCriado = $this->users->create([
-            'nome' => $request->input('nome'),
-            'idade' => $request->input('idade'),
-            'email' => $request->input('email'),
-            'senha' => $request->input('senha'),
-        ]);
 
         
 
@@ -76,7 +63,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $Users = users::findOrFail($id);
+        $Users = user::findOrFail($id);
 
         return view('update', ['update' => $Users]);        
     }
@@ -88,10 +75,7 @@ class UserController extends Controller
     {
         $data =$request->all();
 
-        users::findOrFail($request->id)->update($data);
-
-        $atualizarUser = $this->users->where('id', $id)->update($request->except(['_token', '_method']));
-
+        user::findOrFail($request->id)->update($data);
         
 
             return redirect('/UserController.store')->with('message', 'Funcionário atualizado com sucesso');
@@ -104,10 +88,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        users::findOrFail($id)->delete();
-
-        $this->users->where('id', $id)->delete();
-
+        user::findOrFail($id)->delete();
         return redirect('/UserController.store')->with('message', 'Funcionário excluído com sucesso');
     }
 }

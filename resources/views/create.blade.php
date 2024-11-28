@@ -8,7 +8,7 @@
   <div class="container-fluid">
   <h2>Adicione uma construção</h2>
     
-  <form action="{{ Route('ConstructionController.create')}}" method="POST">
+  <form action="/constructions/store" method="GET">
         @csrf
 
         <h3>Nome da obra:</h3>
@@ -18,16 +18,21 @@
 
         <h3>Data de finalização:</h3>
         <div class="input-group mb-3">
-            <input type="text" name="data_de_finalizacao" class="form-control" aria-label="Text input with dropdown button">
+            <input type="date" name="data_de_finalizacao" class="form-control" aria-label="Text input with dropdown button">
         </div>
 
         <h3>Progresso da obra:</h3>
         <div class="input-group mb-3">
             <select class="form-select" name="andamento_da_obra" aria-label="Example select with button addon">
-                <option value="1" id="pendente">Pendente</option>
-                <option value="2" id="andamento">Em andamento</option>
-                <option value="3" id="finalizada">Finalizada</option>
+                <option value="pendente" id="pendente">Pendente</option>
+                <option value="andamento" id="andamento">Em andamento</option>
+                <option value="finalizada" id="finalizada">Finalizada</option>
             </select>
+        </div>
+
+        <h3>Relatório da obra:</h3>
+        <div class="input-group mb-3">
+            <input type="text" name="relatorio_da_obra" class="form-control" aria-label="Text input with dropdown button">
         </div>
 
         <h3>Solicitação de materiais(Opcional):</h3>
@@ -36,8 +41,8 @@
         </div>
 
 
-        <button type="button" class="btn btn-success">Adicionar</button>
-        <button type="button" class="btn btn-danger">Cancelar</button>
+        <button type="submit" class="btn btn-success">Adicionar</button>
+        <a href="{{route('ConstructionControllerIndex')}}" class="btn btn-danger">Cancelar</a>
 
     </form>
     

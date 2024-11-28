@@ -13,28 +13,19 @@ class ConstructionController extends Controller
      */            
     public function index()
     {
-        $Constructions = constructions::all();
+        $allConstructions = constructions::all();
 
-        return view('constructions', ['constructions' => $Constructions]);
+        return view('constructions', ['allConstructions' => $allConstructions]);
 
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
+    public function create()
     {
         
-
-        $data =$request->all();
-
-        constructions::findOrFail($request->id)->create($data);
-
-        $novaConstrucao = $this->constructions->where('id', $id)->create($request->except(['_token', '_method']));
-
-        
-
-            return redirect('/create')->with('message', 'Obra criada com sucesso');
+        return view('create');
 
     }
 
@@ -48,22 +39,15 @@ class ConstructionController extends Controller
         $Constructions->id = $request->id;
         $Constructions->nome = $request->nome;  
         $Constructions->data_de_finalizacao = $request->data_de_finalizacao;
+        $Constructions->relatorio_da_obra	 = $request->relatorio_da_obra;
         $Constructions->andamento_da_obra = $request->andamento_da_obra;
         $Constructions->solicitacao_de_materiais = $request->solicitacao_de_materiais;
 
         $Constructions->save();
 
+        $allConstructions = constructions::all();
 
-        $construcaoCriada = $this->constructions->create([
-            'nome' => $request->input('nome'),
-            'data_de_finalizacao' => $request->input('data_de_finalizacao'),
-            'andamento_da_obra' => $request->input('andamento_da_obra'),
-            'solicitacao_de_materiais' => $request->input('solicitacao_de_materiais'),
-        ]);
-
-        
-
-            return redirect('/ConstructionController.store')->with('message', 'Obra criada com sucesso');
+        return view('constructions', ['allConstructions' => $allConstructions])->with('message', 'Obra criada com sucesso');
  
 
     }
@@ -77,39 +61,59 @@ class ConstructionController extends Controller
      */
     public function edit($id)
     {
-        $Constructions = constructions::findOrFail($id);
+        $ConstructionsId = constructions::findOrFail($id);
 
-        return view('update', ['constructions' => $Constructions]);
+        return view('update', ['ConstructionsId' => $ConstructionsId]);
     }
     
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        $data =$request->all();
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'data_de_finalizacao' => 'required|date',
+            'andamento_da_obra' => 'required|string|max:255',
+            'solicitacao_de_materiais' => 'max:3000',
+        ], [
+            'nome.required' => 'Este campo é obrigatório',
+            'data_de_finalizacao.required' => 'Este campo é obrigatório',
+            'andamento_da_obra.required' => 'Este campo é obrigatório',
+            'solicitacao_de_materiais.required' => 'Este campo é obrigatório',
+            'nome.string' => 'Utilize um nome válido',
+            'data_de_finalizacao.date' => 'Utilize uma data válida',
+            'andamento_da_obra.string' => 'Preencha este o campo andamento corretamente',
+            'solicitacao_de_materiais.string' => 'Preencha o campo solicitações corretamente',
+            'nome.max' => 'O nome só pode conter 255 caracteres',
+            'andamento_da_obra.max' => 'O campo andamento só pode conter até 255 caracteres',
+            'solicitacao_de_materiais.max' => 'O campo solicitações só pode conter 3000 caracteres',
 
-        constructions::findOrFail($request->id)->update($data);
+        ]);
 
-        $atualizarConstrucao = $this->constructions->where('id', $id)->update($request->except(['_token', '_method']));
+        $Constructions = constructions::findOrFail($id);
 
-        
+        $Constructions->nome = $request->nome;  
+        $Constructions->data_de_finalizacao = $request->data_de_finalizacao;
+        $Constructions->andamento_da_obra = $request->andamento_da_obra;
+        $Constructions->solicitacao_de_materiais = $request->solicitacao_de_materiais;
 
-            return redirect('/ConstructionController.store')->with('message', 'Obra atualizada com sucesso');
+        $Constructions->updated_at = now();
 
+        $Constructions->save();
+
+        return redirect('/constructions/update');
         
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
         constructions::findOrFail($id)->delete();
 
-        $this->constructions->where('id', $id)->delete();
-
-        return redirect('/ConstructionController.store')->with('message', 'Construção excluída com sucesso');
+        return redirect('/constructions/destroy');
     }
 }
 

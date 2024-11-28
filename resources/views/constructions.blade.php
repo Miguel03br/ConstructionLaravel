@@ -27,13 +27,13 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/">Construções</a>
+            <a class="nav-link active" aria-current="page" href="{{route('ConstructionControllerStore')}}">Construções</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="UserControllerIndex">Funcinários</a>
+            <a class="nav-link active" aria-current="page" href="{{route('UserControllerCreate')}}">Funcinários</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/avisos">Avisos</a>
+            <a class="nav-link active" aria-current="page" href="{route('avisos')}}">Avisos</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="RelatorioControllerIndex">Relatórios</a>
@@ -61,7 +61,7 @@
   </thead>
   <tbody>
     
-  @foreach ($Constructions as $construction)
+  @foreach ($allConstructions as $construction)
   
   
 
@@ -146,7 +146,7 @@
 
 -->
 
-<a type="button" href="{{ route('ConstructionControllerCreate')}}" class="btn btn-danger">Adicionar</a>
+<a type="button" href="{{ route('ConstructionControllerCreate')}}" class="btn btn-success">Adicionar</a>
 
 @if(session()->has('message'))
 
