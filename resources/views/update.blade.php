@@ -50,7 +50,10 @@
         <button type="submit" class="btn btn-success">Adicionar</button>
         <button type="button" class="btn btn-danger">Cancelar</button>
 
-        
+        @if ($errors->has('comment'))
+            <div class="text-danger">{{$errors->first('comment')}}</div>
+        @endif
+
     </form>
     
     
