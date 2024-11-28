@@ -112,8 +112,7 @@ class ConstructionController extends Controller
     public function destroy($id)
     {
         constructions::findOrFail($id)->delete();
-        return view('constructions');
-        return redirect()->route('ConstructionControllerIndex', ['allConstructions' => $allConstructions])->with('message', 'Obra deletada com sucesso');
+        return redirect()->route('ConstructionControllerIndex')->with('message', 'Obra deletada com sucesso');
     }
 }
 
