@@ -50,6 +50,10 @@
         <button type="submit" class="btn btn-success">Adicionar</button>
         <a href="{{route('ConstructionControllerIndex')}}" class="btn btn-danger">Cancelar</a>
 
+        @if ($errors->has('comment'))
+            <div class="text-danger">{{$errors->first('comment')}}</div>
+        @endif
+
     </form>
     
     
