@@ -11,42 +11,65 @@
 <title>Bootstrap Example</title>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+<style>
+        .navbar-fixed-top {
+            position: fixed;
+            top: 0;
+            left: 250px;
+            width: calc(100% - 250px);
+            z-index: 9999;
+        }
 
-<nav class="navbar navbar-dark fixed-top" style=" background-color:orange">
-  <div class="container-fluid">
-    <button class="navbar-toggler" style="border-color:white;" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <h1 class="navbar-brand" href="#" style="color:white;">Construções</h1>
-    <img src="{{asset('images/user.png')}}" alt="" width="60px" height="60px" style="border-radius: 50%;">
-    <div class="offcanvas offcanvas-start text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-      <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">ConstruControl</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{route('ConstructionControllerStore')}}">Construções</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{route('UserControllerCreate')}}">Funcinários</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{route('avisos')}}">Avisos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="RelatorioControllerIndex">Relatórios</a>
-          </li>
-        </ul>
-      </div>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            background-color:orange;
+            padding-top: 10px;
+        }
+
+        .navbar-brand {
+            font-size: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="sidebar">
+        <nav class="d-flex flex-column justify-content-between" style=" background-color:orange; width: 250px; height: 100vh;">
+            <div>
+                <div class="nav flex-column">
+                    <a href="{{route('ConstructionControllerStore')}}" class="nav-link text-light font-weight-bold my-2"> Construções</a>
+                    <a href="{{route('UserControllerCreate')}}" class="nav-link text-light font-weight-bold my-2"> Funcinários</a>
+                    <a href="" class="nav-link text-light font-weight-bold my-2"> Avisos</a>
+                    <a href="{{route('RelatorioControllerIndex')}}" class="nav-link text-light font-weight-bold my-2"> Relatórios</a>
+                </div>
+            </div>
+        </nav>
     </div>
-  </div>
-</nav>
 
+    <div class="flex">
+        <nav class="navbar navbar-expand-lg navbar-warning navbar shadow-sm navbar-fixed-top" style="background-color:orange;">
+            <div class="container-fluid">
+              <h1 class="text-white">sei la</h1>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </nav>
+    </div>
 
+<div>
+<a type="button" style="margin-top: 7%;" href="{{ route('ConstructionControllerCreate')}}" class="btn btn-success">Adicionar</a>
 
-<table class="table " style="margin-top: 10%;">
+@if(session()->has('message'))
+
+{{session()->get('message')}}
+
+@endif
+
+<table class="table mt-3">
 
 
   <thead>
@@ -86,77 +109,25 @@
       </td>
 
       <td>
-        <form action="/constructions/destroy/{{$construction->id}}" method="POST">
+        <form action="/constructions/destroy/{{$construction->id}}" method="POST" onsubmit="return confirm('Tem certeza que deseja apagar?');">
           @csrf
           @method('DELETE')
-          <button type="submit" class="btn btn-warning">Deletar</button>
+          <button type="submit" class="btn btn-danger">Deletar</button>
         </form>
 
-        <a type="button" href="/update.blae.php" class="btn btn-warning">Editar</a>
+        <form action="{{route('ConstructionControllerEdit', $construction->id)}}" method="GET"> 
+          @csrf
+          <button type="submit" class="btn btn-warning">Editar</button>
+        </form>
+        
       </td>
     </tr>
     @endforeach
   </tbody>
 </table>
 
-<!--
-
-<button type="button" id="modalAdicionar" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Adicionar
-</button>
-
-
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Adicionar obra:</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-
-      <form action="/constructions" method="POST">
-        @csrf
-        <div class="input-group mb-3">
-          <h2>Nome:</h2>
-          <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-
-        <div class="input-group mb-3">
-          <h2>Data de finalização:</h2>
-          <input type="date" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-
-        <div class="input-group mb-3">
-          <h2>Andamento da obra</h2>
-            <select class="form-select" id="inputGroupSelect03" aria-label="Example select with button addon">
-                <option value="1" id="pendente">Pendente</option>
-                <option value="2" id="andamento">Em andamento</option>
-                <option value="3" id="finalizada">Finalizada</option>
-            </select>       
-        </div>
-
-        <div class="input-group mb-3">
-          <h2>Solicitação de materiais(Opcional):</h2>
-          <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-        </div>
-      </form>
-      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success">Adicionar</button>
-      </div>
-    </div>
-  </div>
 </div>
 
--->
 
-<a type="button" href="{{ route('ConstructionControllerCreate')}}" class="btn btn-success">Adicionar</a>
-
-@if(session()->has('message'))
-
-{{session()->get('message')}}
-
-@endif
 
 @endsection

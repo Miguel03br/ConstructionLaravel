@@ -61,9 +61,9 @@ class ConstructionController extends Controller
      */
     public function edit($id)
     {
-        $ConstructionsId = constructions::findOrFail($id);
+        $Construction = constructions::findOrFail($id);
 
-        return view('update', ['ConstructionsId' => $ConstructionsId]);
+        return view('update', ['Construction' => $Construction]);
     }
     
     /**
@@ -102,7 +102,7 @@ class ConstructionController extends Controller
 
         $Constructions->save();
 
-        return redirect('/constructions/update');
+        return redirect()->route('ConstructionControllerIndex')->with('message', 'Obra atualizada com sucesso');
         
     }
 
