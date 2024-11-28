@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
     public function index(){
-        $Constructions = constructions::all();
-
+        $allConstructions = constructions::all();
         
-        return view('constructions', ['Constructions' => $Constructions]);
+        return redirect()->route('ConstructionControllerIndex', ['allConstructions' => $allConstructions]);
     }
 }

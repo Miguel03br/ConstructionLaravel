@@ -47,7 +47,7 @@
 
 
 <table class="table " style="margin-top: 10%;">
-  
+
 
   <thead>
     <tr>
@@ -60,37 +60,42 @@
     </tr>
   </thead>
   <tbody>
-    
-  @foreach ($allConstructions as $construction)
-  
-  
+
+    @foreach ($allConstructions as $construction)
+
+
 
     <tr>
       <th scope="row">{{$construction->id}}</th>
-    <td>
-        
-      {{$construction->nome}}
-        
-    </td>
+      <td>
 
-    <td>
-      {{$construction->data_de_finalizacao}}
-    </td>
+        {{$construction->nome}}
 
-    <td>
-      {{$construction->andamento_da_obra}}
-    </td>
+      </td>
 
-    <td>
-      {{$construction->solicitacao_de_materiais}}
-    </td>
+      <td>
+        {{$construction->data_de_finalizacao}}
+      </td>
 
-    <td>
-      <a type="button" href="/delete.blade.php" class="btn btn-danger">Deletar</a>
-      <a type="button" href="/update.blae.php" class="btn btn-warning">Editar</a>
-    </td>
+      <td>
+        {{$construction->andamento_da_obra}}
+      </td>
+
+      <td>
+        {{$construction->solicitacao_de_materiais}}
+      </td>
+
+      <td>
+        <form action="/constructions/destroy/{{$construction->id}}" method="POST">
+          @csrf
+          @method('DELETE')
+          <button type="submit" class="btn btn-warning">Deletar</button>
+        </form>
+
+        <a type="button" href="/update.blae.php" class="btn btn-warning">Editar</a>
+      </td>
     </tr>
-  @endforeach
+    @endforeach
   </tbody>
 </table>
 
@@ -150,7 +155,7 @@
 
 @if(session()->has('message'))
 
-  {{session()->get('message')}}
+{{session()->get('message')}}
 
 @endif
 
